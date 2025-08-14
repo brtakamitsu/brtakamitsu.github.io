@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gerador de Avaliação - Área Restrita</title>
+<title>Página Restrita - Gerador de Avaliação</title>
 <style>
 :root {
     --bg-color: #202123;
@@ -34,9 +34,7 @@ nav {
     gap: 1rem;
     box-shadow: 2px 0 5px rgba(0,0,0,0.3);
     transition: transform 0.3s ease;
-    z-index: 1000;
 }
-nav.hidden { transform: translateX(-100%); }
 nav h3 {
     color: var(--muted-color);
     font-weight: normal;
@@ -51,24 +49,9 @@ nav a {
     border-radius: 6px;
     transition: background 0.3s;
 }
-nav a:hover { background: rgba(255,255,255,0.05); }
-
-/* Botão hamburger */
-#menu-toggle {
-    display: none;
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    background: var(--card-color);
-    border: none;
-    padding: 10px;
-    border-radius: 6px;
-    color: var(--text-color);
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 1100;
+nav a:hover {
+    background: rgba(255,255,255,0.05);
 }
-
 main {
     flex: 1;
     padding: 2rem;
@@ -76,96 +59,91 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: margin-left 0.3s ease;
 }
-
-.container {
+h2, p {
+    text-align: center;
+}
+.login-box, .container {
     background: var(--card-color);
-    border-radius: 16px;
-    padding: 30px 40px;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    width: 100%;
     max-width: 640px;
-    width: 100%;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-h2 {
-    font-weight: 700;
-    font-size: 2rem;
-    color: var(--accent-color);
     display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 30px;
+    flex-direction: column;
+    gap: 1rem;
 }
-label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: var(--text-color);
-}
-input[type="text"], select, textarea {
+input, select, textarea {
     width: 100%;
-    padding: 12px 16px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    border: 2px solid #444;
-    font-size: 1rem;
+    padding: 0.8rem;
+    border: 1px solid #444;
+    border-radius: 8px;
     background: #1e1f21;
     color: var(--text-color);
     font-family: inherit;
-    resize: vertical;
-    box-sizing: border-box;
 }
-input[type="text"]:focus, select:focus, textarea:focus {
-    border-color: var(--accent-color);
-    outline: none;
-    box-shadow: 0 0 8px #10a37faa;
-}
-textarea { min-height: 100px; }
-
 button {
-    background-color: var(--accent-color);
+    background: var(--accent-color);
     color: white;
     border: none;
-    padding: 14px 28px;
-    border-radius: 14px;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: 600;
-    box-shadow: 0 5px 12px rgba(16,163,127,0.5);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1rem;
+    transition: background 0.3s;
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
-button:hover:not(:disabled) { background-color: #0e8c6e; box-shadow: 0 7px 18px rgba(14,140,110,0.6); }
-button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
-
+button:hover {
+    background: #0e8c6e;
+}
 #resultado {
-    margin-top: 30px;
+    margin-top: 1rem;
     background: #1e1f21;
-    border-radius: 16px;
-    border: 2px solid #10a37f55;
-    padding: 24px 28px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 1rem;
     min-height: 140px;
-    font-size: 1.15rem;
-    line-height: 1.6;
+    font-size: 1rem;
+    line-height: 1.5;
     white-space: pre-wrap;
     user-select: text;
-    color: var(--text-color);
 }
-#copiarBtn { margin-left: 10px; display: none; }
-
-/* Mobile */
-@media screen and (max-width: 768px) {
-    nav { transform: translateX(-100%); position: fixed; top: 0; left: 0; }
-    nav.show { transform: translateX(0); }
-    #menu-toggle { display: block; }
-    main { margin-left: 0; padding: 1rem; }
+#copiarBtn {
+    display: none;
+}
+#menuToggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    background: var(--accent-color);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 1000;
+}
+@media(max-width:768px){
+    nav {
+        transform: translateX(-240px);
+        position: fixed;
+        z-index: 999;
+    }
+    nav.active {
+        transform: translateX(0);
+    }
+    main {
+        margin-left: 0;
+    }
+    #menuToggle {
+        display: block;
+    }
 }
 </style>
-
-<!-- Botão menu -->
-<button id="menu-toggle">☰</button>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -182,87 +160,26 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-// Verifica se usuário está logado
+// Verifica login
 auth.onAuthStateChanged(user => {
-    if (!user) {
-        window.location.href = "index.html"; // redireciona se não estiver logado
+    if(!user){
+        window.location.href = "index.html";
     }
 });
-</script>
 
-</head>
-<body>
-<nav id="menu">
-    <h3>Menu</h3>
-    <a href="index.html">Início</a>
-    <a href="https://lojinha.uno.dev.br">Loja Infantil</a>
-    <a href="#">Projetos</a>
-    <a href="mailto:bruno@uno.dev.br">Contato</a>
-</nav>
+// Logout
+function logout(){
+    auth.signOut().then(()=>{window.location.href="index.html";});
+}
 
-<main>
-    <div class="container">
-        <h2><span>📚</span> Gerador de Avaliação - Cultura Digital</h2>
+// Menu mobile
+function toggleMenu(){
+    document.querySelector('nav').classList.toggle('active');
+}
 
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" placeholder="Digite o nome do aluno" autocomplete="off" />
-
-        <label for="genero">Gênero:</label>
-        <select id="genero">
-            <option value="menino">Menino</option>
-            <option value="menina">Menina</option>
-            <option value="outro">Outro</option>
-        </select>
-
-        <label for="participacao">Participação em sala:</label>
-        <select id="participacao">
-            <option value="alta">Alta</option>
-            <option value="media">Média</option>
-            <option value="baixa">Baixa</option>
-        </select>
-
-        <label for="comportamento">Comportamento:</label>
-        <select id="comportamento">
-            <option value="respeitoso">Respeitoso</option>
-            <option value="colaborativo">Colaborativo</option>
-            <option value="cuidadoso">Cuidadoso</option>
-            <option value="conflituoso">Conflituoso</option>
-        </select>
-
-        <label for="interesse">Nível de interesse:</label>
-        <select id="interesse">
-            <option value="alto">Alto</option>
-            <option value="medio">Médio</option>
-            <option value="baixo">Baixo</option>
-        </select>
-
-        <label for="habilidadeComputador">Habilidade em manusear o computador:</label>
-        <select id="habilidadeComputador">
-            <option value="sem dificuldades">Sem dificuldades</option>
-            <option value="com algumas dificuldades">Com algumas dificuldades</option>
-            <option value="necessita de apoio constante">Necessita de apoio constante</option>
-        </select>
-
-        <label for="observacoes">Observações adicionais:</label>
-        <textarea id="observacoes" placeholder="Digite aqui observações adicionais..."></textarea>
-
-        <button onclick="criarAvaliacao()"><span>📄</span> Gerar Avaliação</button>
-        <button id="copiarBtn" onclick="copiarTexto()"><span>📋</span> Copiar Texto</button>
-
-        <div id="resultado" aria-live="polite"></div>
-    </div>
-</main>
-
-<script>
-// Menu toggle
-const menuToggle = document.getElementById('menu-toggle');
-const nav = document.getElementById('menu');
-menuToggle.addEventListener('click', () => { nav.classList.toggle('show'); });
-
-// Funções do Gerador
-function fraseAleatoria(array) { return array[Math.floor(Math.random() * array.length)]; }
-
-function criarAvaliacao() {
+// Gerador de avaliação
+function fraseAleatoria(array){return array[Math.floor(Math.random()*array.length)];}
+function criarAvaliacao(){
     const nome = document.getElementById('nome').value.trim();
     const genero = document.getElementById('genero').value;
     const participacao = document.getElementById('participacao').value;
@@ -270,7 +187,8 @@ function criarAvaliacao() {
     const interesse = document.getElementById('interesse').value;
     const habilidadeComputador = document.getElementById('habilidadeComputador').value;
     const observacoes = document.getElementById('observacoes').value.trim();
-    if (!nome) { alert('Por favor, preencha o nome.'); return; }
+
+    if(!nome){alert('Por favor, preencha o nome.'); return;}
 
     const frasesParticipacao = {
   alta: [
@@ -405,22 +323,90 @@ const frasesHabilidadeComputador = {
     avaliacao += `${fraseAleatoria(frasesComportamento[comportamento])}. `;
     avaliacao += `${fraseAleatoria(frasesInteresse[interesse])}. `;
     avaliacao += `${fraseAleatoria(frasesHabilidadeComputador[habilidadeComputador])}.`;
-    if (observacoes) { avaliacao += ` ${observacoes}`; }
+    if(observacoes){avaliacao += ` ${observacoes}`;}
 
     document.getElementById('resultado').innerText = avaliacao;
     document.getElementById('copiarBtn').style.display = 'inline-flex';
 }
 
-function copiarTexto() {
+function copiarTexto(){
     const texto = document.getElementById('resultado').innerText;
-    if (!texto) { alert('Nenhum texto para copiar.'); return; }
-    navigator.clipboard.writeText(texto).then(() => {
+    if(!texto){alert('Nenhum texto para copiar.'); return;}
+    navigator.clipboard.writeText(texto).then(()=>{
         const btn = document.getElementById('copiarBtn');
-        btn.innerText = "✅ Copiado!";
-        setTimeout(() => { btn.innerHTML = '<span>📋</span> Copiar Texto'; }, 2000);
-    }).catch(err => { alert("Erro ao copiar o texto: " + err); });
+        btn.innerText="✅ Copiado!";
+        setTimeout(()=>{btn.innerHTML='<span class="btn-icon" aria-hidden="true">📋</span> Copiar Texto';},2000);
+    }).catch(err=>{alert("Erro ao copiar o texto: "+err);});
 }
 </script>
+</head>
+<body>
+<button id="menuToggle" onclick="toggleMenu()">☰ Menu</button>
+
+<nav>
+<h3>Menu</h3>
+<a href="index.html">Início</a>
+<a href="https://lojinha.uno.dev.br">Loja Infantil</a>
+<a href="#">Projetos</a>
+<a href="mailto:bruno@uno.dev.br">Contato</a>
+<a href="#" onclick="logout()">Sair</a>
+</nav>
+
+<main>
+<div class="container">
+<h2>Gerador de Avaliação - Cultura Digital</h2>
+
+<label for="nome">Nome:</label>
+<input type="text" id="nome" placeholder="Digite o nome do aluno" autocomplete="off" />
+
+<label for="genero">Gênero:</label>
+<select id="genero">
+<option value="menino">Menino</option>
+<option value="menina">Menina</option>
+<option value="outro">Outro</option>
+</select>
+
+<label for="participacao">Participação em sala:</label>
+<select id="participacao">
+<option value="alta">Alta</option>
+<option value="media">Média</option>
+<option value="baixa">Baixa</option>
+</select>
+
+<label for="comportamento">Comportamento:</label>
+<select id="comportamento">
+<option value="respeitoso">Respeitoso</option>
+<option value="colaborativo">Colaborativo</option>
+<option value="cuidadoso">Cuidadoso</option>
+<option value="conflituoso">Conflituoso</option>
+</select>
+
+<label for="interesse">Nível de interesse:</label>
+<select id="interesse">
+<option value="alto">Alto</option>
+<option value="medio">Médio</option>
+<option value="baixo">Baixo</option>
+</select>
+
+<label for="habilidadeComputador">Habilidade em manusear o computador:</label>
+<select id="habilidadeComputador">
+<option value="sem dificuldades">Sem dificuldades</option>
+<option value="com algumas dificuldades">Com algumas dificuldades</option>
+<option value="necessita de apoio constante">Necessita de apoio constante</option>
+</select>
+
+<label for="observacoes">Observações adicionais:</label>
+<textarea id="observacoes" placeholder="Digite aqui observações adicionais..."></textarea>
+
+<button onclick="criarAvaliacao()">
+📄 Gerar Avaliação
+</button>
+<button id="copiarBtn" onclick="copiarTexto()">
+📋 Copiar Texto
+</button>
+
+<div id="resultado" aria-live="polite"></div>
+</div>
+</main>
 </body>
 </html>
-
