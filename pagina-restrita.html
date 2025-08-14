@@ -1,109 +1,177 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Restrita</title>
-    <style>
-        :root {
-            --bg-color: #202123;
-            --card-color: #2b2c2f;
-            --accent-color: #10a37f;
-            --text-color: #ececec;
-            --muted-color: #a0a0a0;
-        }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            min-height: 100vh;
-        }
-        nav {
-            background: var(--card-color);
-            width: 220px;
-            padding: 1rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.3);
-        }
-        nav h3 {
-            color: var(--muted-color);
-            font-weight: normal;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #444;
-            padding-bottom: 0.5rem;
-        }
-        nav a, nav button {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 0.5rem;
-            border-radius: 6px;
-            transition: background 0.3s;
-            background: none;
-            border: none;
-            text-align: left;
-            cursor: pointer;
-        }
-        nav a:hover, nav button:hover {
-            background: rgba(255,255,255,0.05);
-        }
-        main {
-            flex: 1;
-            padding: 2rem;
-            margin-left: 220px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        h2, p {
-            text-align: center;
-        }
-        .card {
-            background: var(--card-color);
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-        }
-        .btn {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s;
-            margin-top: 1rem;
-        }
-        .btn:hover {
-            background: #0e8c6e;
-        }
-        footer {
-            text-align: center;
-            padding: 1rem;
-            font-size: 0.85rem;
-            color: var(--muted-color);
-            margin-top: 2rem;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Avaliação - Área Restrita</title>
+<style>
+:root {
+    --bg-color: #202123;
+    --card-color: #2b2c2f;
+    --accent-color: #10a37f;
+    --text-color: #ececec;
+    --muted-color: #a0a0a0;
+}
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    min-height: 100vh;
+}
+nav {
+    background: var(--card-color);
+    width: 220px;
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+nav.hidden { transform: translateX(-100%); }
+nav h3 {
+    color: var(--muted-color);
+    font-weight: normal;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.5rem;
+}
+nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+nav a:hover { background: rgba(255,255,255,0.05); }
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script>
-        const firebaseConfig = {
+/* Botão hamburger */
+#menu-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: var(--card-color);
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1100;
+}
+
+main {
+    flex: 1;
+    padding: 2rem;
+    margin-left: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: margin-left 0.3s ease;
+}
+
+.container {
+    background: var(--card-color);
+    border-radius: 16px;
+    padding: 30px 40px;
+    max-width: 640px;
+    width: 100%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+h2 {
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+input[type="text"], select, textarea {
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    border: 2px solid #444;
+    font-size: 1rem;
+    background: #1e1f21;
+    color: var(--text-color);
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+}
+input[type="text"]:focus, select:focus, textarea:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 8px #10a37faa;
+}
+textarea { min-height: 100px; }
+
+button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 5px 12px rgba(16,163,127,0.5);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+button:hover:not(:disabled) { background-color: #0e8c6e; box-shadow: 0 7px 18px rgba(14,140,110,0.6); }
+button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+#resultado {
+    margin-top: 30px;
+    background: #1e1f21;
+    border-radius: 16px;
+    border: 2px solid #10a37f55;
+    padding: 24px 28px;
+    min-height: 140px;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    user-select: text;
+    color: var(--text-color);
+}
+#copiarBtn { margin-left: 10px; display: none; }
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+    nav { transform: translateX(-100%); position: fixed; top: 0; left: 0; }
+    nav.show { transform: translateX(0); }
+    #menu-toggle { display: block; }
+    main { margin-left: 0; padding: 1rem; }
+}
+</style>
+
+<!-- Botão menu -->
+<button id="menu-toggle">☰</button>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig = {
   apiKey: "AIzaSyCq1tx1zNS4OPk0Yb6sO-jgDbR0-uReycM",
   authDomain: "websitepesssoal.firebaseapp.com",
   projectId: "websitepesssoal",
@@ -111,44 +179,140 @@
   messagingSenderId: "160354813253",
   appId: "1:160354813253:web:2a6c95530d9799b532aa2c"
 };
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+// Verifica se usuário está logado
+auth.onAuthStateChanged(user => {
+    if (!user) {
+        window.location.href = "index.html"; // redireciona se não estiver logado
+    }
+});
+</script>
 
-        // Redireciona se não estiver logado
-        auth.onAuthStateChanged(user => {
-            if (!user) {
-                window.location.href = "index.html";
-            }
-        });
-
-        function logout() {
-            auth.signOut().then(() => {
-                window.location.href = "index.html";
-            });
-        }
-    </script>
 </head>
 <body>
-    <nav>
-        <h3>Menu</h3>
-        <a href="index.html">Início</a>
-        <a href="https://lojinha.uno.dev.br">Loja Infantil</a>
-        <a href="#">Projetos</a>
-        <a href="mailto:bruno@uno.dev.br">Contato</a>
-        <button class="btn" onclick="logout()">Sair</button>
-    </nav>
+<nav id="menu">
+    <h3>Menu</h3>
+    <a href="index.html">Início</a>
+    <a href="https://lojinha.uno.dev.br">Loja Infantil</a>
+    <a href="#">Projetos</a>
+    <a href="mailto:bruno@uno.dev.br">Contato</a>
+</nav>
 
-    <main>
-        <div class="card">
-            <h2>Página Restrita</h2>
-            <p>Parabéns! Você está logado e tem acesso a esta área exclusiva.</p>
-            <p>Aqui você pode adicionar conteúdos, links ou informações que só usuários autenticados devem ver.</p>
-        </div>
+<main>
+    <div class="container">
+        <h2><span>📚</span> Gerador de Avaliação - Cultura Digital</h2>
 
-        <footer>
-            &copy; 2025 - Criado por Você
-        </footer>
-    </main>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" placeholder="Digite o nome do aluno" autocomplete="off" />
+
+        <label for="genero">Gênero:</label>
+        <select id="genero">
+            <option value="menino">Menino</option>
+            <option value="menina">Menina</option>
+            <option value="outro">Outro</option>
+        </select>
+
+        <label for="participacao">Participação em sala:</label>
+        <select id="participacao">
+            <option value="alta">Alta</option>
+            <option value="media">Média</option>
+            <option value="baixa">Baixa</option>
+        </select>
+
+        <label for="comportamento">Comportamento:</label>
+        <select id="comportamento">
+            <option value="respeitoso">Respeitoso</option>
+            <option value="colaborativo">Colaborativo</option>
+            <option value="cuidadoso">Cuidadoso</option>
+            <option value="conflituoso">Conflituoso</option>
+        </select>
+
+        <label for="interesse">Nível de interesse:</label>
+        <select id="interesse">
+            <option value="alto">Alto</option>
+            <option value="medio">Médio</option>
+            <option value="baixo">Baixo</option>
+        </select>
+
+        <label for="habilidadeComputador">Habilidade em manusear o computador:</label>
+        <select id="habilidadeComputador">
+            <option value="sem dificuldades">Sem dificuldades</option>
+            <option value="com algumas dificuldades">Com algumas dificuldades</option>
+            <option value="necessita de apoio constante">Necessita de apoio constante</option>
+        </select>
+
+        <label for="observacoes">Observações adicionais:</label>
+        <textarea id="observacoes" placeholder="Digite aqui observações adicionais..."></textarea>
+
+        <button onclick="criarAvaliacao()"><span>📄</span> Gerar Avaliação</button>
+        <button id="copiarBtn" onclick="copiarTexto()"><span>📋</span> Copiar Texto</button>
+
+        <div id="resultado" aria-live="polite"></div>
+    </div>
+</main>
+
+<script>
+// Menu toggle
+const menuToggle = document.getElementById('menu-toggle');
+const nav = document.getElementById('menu');
+menuToggle.addEventListener('click', () => { nav.classList.toggle('show'); });
+
+// Funções do Gerador
+function fraseAleatoria(array) { return array[Math.floor(Math.random() * array.length)]; }
+
+function criarAvaliacao() {
+    const nome = document.getElementById('nome').value.trim();
+    const genero = document.getElementById('genero').value;
+    const participacao = document.getElementById('participacao').value;
+    const comportamento = document.getElementById('comportamento').value;
+    const interesse = document.getElementById('interesse').value;
+    const habilidadeComputador = document.getElementById('habilidadeComputador').value;
+    const observacoes = document.getElementById('observacoes').value.trim();
+    if (!nome) { alert('Por favor, preencha o nome.'); return; }
+
+    const frasesParticipacao = {
+        alta: ["demonstrou grande engajamento...", "esteve sempre presente...", "participou com entusiasmo..."],
+        media: ["participou de forma consistente...", "esteve atento e colaborou...", "demonstrou interesse..."],
+        baixa: ["teve uma participação mais reservada...", "interagiu pontualmente...", "aproveitou as oportunidades..."]
+    };
+    const frasesComportamento = {
+        respeitoso: ["Mantém uma postura respeitosa...", "Demonstra respeito...", "Trata todos com cordialidade..."],
+        colaborativo: ["Colabora ativamente...", "Contribui para o trabalho coletivo...", "Mostra espírito de equipe..."],
+        cuidadoso: ["Cuida dos materiais e recursos...", "Demonstrou atenção aos detalhes...", "Preocupa-se em manter o espaço..."],
+        conflituoso: ["Envolve-se em constantes conflitos...", "Apresenta dificuldades em lidar com conflitos...", "Necessita de acompanhamento..."]
+    };
+    const frasesInteresse = {
+        alto: ["Busca sempre explorar e compreender...", "Demonstra grande interesse...", "Mostra entusiasmo nas atividades..."],
+        medio: ["Mantém um bom nível de interesse...", "Mostra disposição para aprender...", "Demonstra curiosidade e atenção..."],
+        baixo: ["Mostra interesse em pontos específicos...", "Participa de forma seletiva...", "Demonstrou desmotivação em algumas situações..."]
+    };
+    const frasesHabilidadeComputador = {
+        "sem dificuldades": ["Manuseia o computador com facilidade...", "Demonstrou boa habilidade...", "Apresenta confiança no uso das ferramentas..."],
+        "com algumas dificuldades": ["Enfrenta algumas dificuldades...", "Apresenta desafios pontuais...", "Precisa de apoio em certas etapas..."],
+        "necessita de apoio constante": ["Necessita de apoio constante...", "Encontra dificuldades significativas...", "Depende de orientação frequente..."]
+    };
+
+    let avaliacao = `Durante as aulas de Cultura Digital, ${nome} ${fraseAleatoria(frasesParticipacao[participacao])}. `;
+    avaliacao += `${fraseAleatoria(frasesComportamento[comportamento])}. `;
+    avaliacao += `${fraseAleatoria(frasesInteresse[interesse])}. `;
+    avaliacao += `${fraseAleatoria(frasesHabilidadeComputador[habilidadeComputador])}.`;
+    if (observacoes) { avaliacao += ` ${observacoes}`; }
+
+    document.getElementById('resultado').innerText = avaliacao;
+    document.getElementById('copiarBtn').style.display = 'inline-flex';
+}
+
+function copiarTexto() {
+    const texto = document.getElementById('resultado').innerText;
+    if (!texto) { alert('Nenhum texto para copiar.'); return; }
+    navigator.clipboard.writeText(texto).then(() => {
+        const btn = document.getElementById('copiarBtn');
+        btn.innerText = "✅ Copiado!";
+        setTimeout(() => { btn.innerHTML = '<span>📋</span> Copiar Texto'; }, 2000);
+    }).catch(err => { alert("Erro ao copiar o texto: " + err); });
+}
+</script>
 </body>
 </html>
