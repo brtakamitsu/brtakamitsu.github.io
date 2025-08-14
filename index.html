@@ -1,122 +1,139 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Site Pessoal</title>
-    <style>
-        :root {
-            --bg-color: #202123;
-            --card-color: #2b2c2f;
-            --accent-color: #10a37f;
-            --text-color: #ececec;
-            --muted-color: #a0a0a0;
-        }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            min-height: 100vh;
-        }
-        nav {
-            background: var(--card-color);
-            width: 220px;
-            padding: 1rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.3);
-        }
-        nav h3 {
-            color: var(--muted-color);
-            font-weight: normal;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #444;
-            padding-bottom: 0.5rem;
-        }
-        nav a {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 0.5rem;
-            border-radius: 6px;
-            transition: background 0.3s;
-        }
-        nav a:hover {
-            background: rgba(255,255,255,0.05);
-        }
-        main {
-            flex: 1;
-            padding: 2rem;
-            margin-left: 220px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        h2, p {
-            text-align: center;
-        }
-        .login-box {
-            background: var(--card-color);
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 320px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 0.8rem;
-            margin: 0.5rem 0;
-            border: 1px solid #444;
-            border-radius: 8px;
-            background: #1e1f21;
-            color: var(--text-color);
-        }
-        .btn {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s;
-            margin-top: 0.5rem;
-        }
-        .btn:hover {
-            background: #0e8c6e;
-        }
-        #msgErro {
-            color: #f44336;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        footer {
-            text-align: center;
-            padding: 1rem;
-            font-size: 0.85rem;
-            color: var(--muted-color);
-            margin-top: 2rem;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B. T. Uno</title>
+<style>
+:root {
+    --bg-color: #202123;
+    --card-color: #2b2c2f;
+    --accent-color: #10a37f;
+    --text-color: #ececec;
+    --muted-color: #a0a0a0;
+}
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    min-height: 100vh;
+}
+nav {
+    background: var(--card-color);
+    width: 220px;
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+nav.hidden { transform: translateX(-100%); }
+nav h3 {
+    color: var(--muted-color);
+    font-weight: normal;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.5rem;
+}
+nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+nav a:hover { background: rgba(255,255,255,0.05); }
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script>
-        const firebaseConfig = {
+/* Botão hamburger */
+#menu-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: var(--card-color);
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1100;
+}
+
+main {
+    flex: 1;
+    padding: 2rem;
+    margin-left: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: margin-left 0.3s ease;
+}
+h2, p { text-align: center; }
+
+.login-box {
+    background: var(--card-color);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login-box input {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #1e1f21;
+    color: var(--text-color);
+}
+.btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+    margin-top: 0.5rem;
+}
+.btn:hover { background: #0e8c6e; }
+#msgErro { color: #f44336; margin-top: 0.5rem; font-size: 0.9rem; text-align: center; }
+
+footer { text-align: center; padding: 1rem; font-size: 0.85rem; color: var(--muted-color); margin-top: 2rem; }
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+    nav { transform: translateX(-100%); position: fixed; top: 0; left: 0; }
+    nav.show { transform: translateX(0); }
+    #menu-toggle { display: block; }
+    main { margin-left: 0; padding: 1rem; }
+}
+</style>
+
+<!-- Botão menu -->
+<button id="menu-toggle">☰</button>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig = {
   apiKey: "AIzaSyCq1tx1zNS4OPk0Yb6sO-jgDbR0-uReycM",
   authDomain: "websitepesssoal.firebaseapp.com",
   projectId: "websitepesssoal",
@@ -124,45 +141,48 @@
   messagingSenderId: "160354813253",
   appId: "1:160354813253:web:2a6c95530d9799b532aa2c"
 };
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+function loginFirebase() {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+    const msgErro = document.getElementById("msgErro");
 
-        function loginFirebase() {
-            const email = document.getElementById("email").value;
-            const senha = document.getElementById("senha").value;
-            const msgErro = document.getElementById("msgErro");
-
-            auth.signInWithEmailAndPassword(email, senha)
-                .then(() => {
-                    window.location.href = "pagina-restrita.html";
-                })
-                .catch(error => {
-                    msgErro.textContent = error.message;
-                });
-        }
-    </script>
+    auth.signInWithEmailAndPassword(email, senha)
+        .then(() => { window.location.href = "pagina-restrita.html"; })
+        .catch(error => { msgErro.textContent = error.message; });
+}
+</script>
 </head>
 <body>
-    <nav>
-        <h3>Menu</h3>
-        <a href="index.html">Início</a>
-        <a href="https://lojinha.uno.dev.br">Loja Infantil</a>
-        <a href="#">Projetos</a>
-        <a href="mailto:bruno@uno.dev.br">Contato</a>
-    </nav>
+<nav id="menu">
+    <h3>Menu</h3>
+    <a href="index.html">Início</a>
+    <a href="https://lojinha.uno.dev.br">Loja Infantil</a>
+    <a href="#">Projetos</a>
+    <a href="mailto:bruno@uno.dev.br">Contato</a>
+</nav>
 
-    <main>
-        <div class="login-box">
-            <h3>Área Restrita</h3>
-            <input type="email" id="email" placeholder="E-mail">
-            <input type="password" id="senha" placeholder="Senha">
-            <button class="btn" onclick="loginFirebase()">Entrar</button>
-            <p id="msgErro"></p>
-        </div>
-        <footer>
-            &copy; 2025 - Criado por B. T. Uno
-        </footer>
-    </main>
+<main>
+    <div class="login-box">
+        <h3>Área Restrita</h3>
+        <input type="email" id="email" placeholder="E-mail">
+        <input type="password" id="senha" placeholder="Senha">
+        <button class="btn" onclick="loginFirebase()">Entrar</button>
+        <p id="msgErro"></p>
+    </div>
+    <footer>&copy; 2025 - Criado por B. T. Uno</footer>
+</main>
+
+<script>
+// Menu toggle
+const menuToggle = document.getElementById('menu-toggle');
+const nav = document.getElementById('menu');
+
+menuToggle.addEventListener('click', () => {
+    nav.classList.toggle('show');
+});
+</script>
 </body>
 </html>
