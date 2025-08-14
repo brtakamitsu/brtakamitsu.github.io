@@ -273,26 +273,133 @@ function criarAvaliacao() {
     if (!nome) { alert('Por favor, preencha o nome.'); return; }
 
     const frasesParticipacao = {
-        alta: ["demonstrou grande engajamento...", "esteve sempre presente...", "participou com entusiasmo..."],
-        media: ["participou de forma consistente...", "esteve atento e colaborou...", "demonstrou interesse..."],
-        baixa: ["teve uma participação mais reservada...", "interagiu pontualmente...", "aproveitou as oportunidades..."]
-    };
-    const frasesComportamento = {
-        respeitoso: ["Mantém uma postura respeitosa...", "Demonstra respeito...", "Trata todos com cordialidade..."],
-        colaborativo: ["Colabora ativamente...", "Contribui para o trabalho coletivo...", "Mostra espírito de equipe..."],
-        cuidadoso: ["Cuida dos materiais e recursos...", "Demonstrou atenção aos detalhes...", "Preocupa-se em manter o espaço..."],
-        conflituoso: ["Envolve-se em constantes conflitos...", "Apresenta dificuldades em lidar com conflitos...", "Necessita de acompanhamento..."]
-    };
-    const frasesInteresse = {
-        alto: ["Busca sempre explorar e compreender...", "Demonstra grande interesse...", "Mostra entusiasmo nas atividades..."],
-        medio: ["Mantém um bom nível de interesse...", "Mostra disposição para aprender...", "Demonstra curiosidade e atenção..."],
-        baixo: ["Mostra interesse em pontos específicos...", "Participa de forma seletiva...", "Demonstrou desmotivação em algumas situações..."]
-    };
-    const frasesHabilidadeComputador = {
-        "sem dificuldades": ["Manuseia o computador com facilidade...", "Demonstrou boa habilidade...", "Apresenta confiança no uso das ferramentas..."],
-        "com algumas dificuldades": ["Enfrenta algumas dificuldades...", "Apresenta desafios pontuais...", "Precisa de apoio em certas etapas..."],
-        "necessita de apoio constante": ["Necessita de apoio constante...", "Encontra dificuldades significativas...", "Depende de orientação frequente..."]
-    };
+  alta: [
+    "demonstrou grande engajamento e interesse durante as aulas, participando ativamente das atividades propostas e contribuindo positivamente para o ambiente de aprendizagem",
+    "esteve sempre presente nas discussões e tarefas, mostrando entusiasmo e dedicação ao longo do trimestre",
+    "participou com entusiasmo e colaborou efetivamente nas atividades em grupo, evidenciando compromisso com o próprio aprendizado",
+    "contribuiu de forma significativa nas dinâmicas da sala, sempre disposto a ajudar e aprender",
+    "teve uma postura proativa, buscando sempre participar das oportunidades de aprendizagem",
+    "demonstrou iniciativa em diversas atividades, enriquecendo as discussões com suas colocações",
+    "mostrou-se envolvido e interessado, participando ativamente dos momentos propostos em aula"
+  ],
+  media: [
+    "participou de forma consistente, mostrando boa interação com a turma e interesse nas atividades propostas",
+    "esteve atento e colaborou em vários momentos, evidenciando um envolvimento gradual com os conteúdos trabalhados",
+    "demonstrou interesse e contribuiu de maneira significativa em diversas atividades, buscando sempre melhorar",
+    "aproveitou as oportunidades para interagir e demonstrar conhecimento, mesmo que de forma moderada",
+    "participou pontualmente, mostrando sinais de engajamento que podem ser ampliados",
+    "teve participação equilibrada, contribuindo para o andamento das aulas de maneira satisfatória",
+    "mostrou-se receptivo às propostas, ainda que com participação intermitente"
+  ],
+  baixa: [
+    "teve uma participação mais reservada, aproveitando os momentos de interação para aprender e observar",
+    "interagiu pontualmente, mas pode ampliar seu envolvimento nas atividades para potencializar o aprendizado",
+    "aproveitou as oportunidades de participação quando se sentiu confortável, com espaço para desenvolver maior engajamento",
+    "demonstrou interesse limitado nas atividades, com potencial para maior envolvimento",
+    "participou em momentos específicos, sendo importante incentivar maior participação",
+    "teve um perfil mais observador, que pode ser estimulado para maior interação",
+    "precisa de estímulo para se envolver mais ativamente nas propostas de aula"
+  ]
+};
+
+const frasesComportamento = {
+  respeitoso: [
+    "Mantém uma postura respeitosa e cordial com colegas e professores, colaborando para um ambiente harmonioso e saudável",
+    "Demonstra respeito e consideração no ambiente escolar, valorizando o convívio social e o trabalho em grupo",
+    "Trata todos com cordialidade e atenção, contribuindo para o fortalecimento das relações interpessoais na turma",
+    "Respeita as regras da sala e participa com educação, promovendo o bem-estar coletivo",
+    "Mostra empatia e cuidado nas interações, favorecendo um ambiente positivo e acolhedor",
+    "Age com gentileza e respeito, fortalecendo o espírito de colaboração entre os colegas",
+    "Apresenta atitudes respeitosas que contribuem para a convivência pacífica e produtiva em sala"
+  ],
+  colaborativo: [
+    "Colabora ativamente com o grupo e incentiva o trabalho em equipe, fortalecendo o espírito coletivo",
+    "Contribui para o trabalho coletivo e ajuda colegas quando necessário, demonstrando empatia e responsabilidade",
+    "Mostra espírito de equipe e disposição para apoiar os demais, promovendo um ambiente colaborativo e positivo",
+    "Participa das atividades em grupo com entusiasmo e respeito, facilitando a integração dos colegas",
+    "Oferece ajuda e compartilha conhecimentos, tornando-se um ponto de apoio para a turma",
+    "Demonstra comprometimento com o sucesso coletivo, incentivando o diálogo e a cooperação",
+    "Valoriza o trabalho conjunto, contribuindo para o alcance dos objetivos comuns"
+  ],
+  cuidadoso: [
+    "Cuida dos materiais e recursos utilizados, prezando pela organização e bom uso dos equipamentos",
+    "Demonstra atenção aos detalhes e zelo com os equipamentos, contribuindo para a conservação dos recursos da escola",
+    "Preocupa-se em manter o espaço de trabalho limpo e organizado, respeitando as normas e o ambiente escolar",
+    "Mostra responsabilidade com os recursos disponibilizados, evitando desperdícios e danos",
+    "Zela pela manutenção dos equipamentos, participando ativamente para preservar o ambiente escolar",
+    "Tem cuidado especial com os materiais, assegurando que estejam sempre em boas condições para uso",
+    "Adota posturas que favorecem a durabilidade dos recursos e o bom funcionamento das atividades"
+  ],
+  conflituoso: [
+    "Envolve-se em constantes conflitos, o que requer a intervenção do professor para mediar situações e garantir um ambiente adequado",
+    "Apresenta dificuldades em lidar com situações de conflito, demandando atenção especial e acompanhamento contínuo",
+    "Necessita de acompanhamento para administrar conflitos e promover um ambiente mais harmonioso, buscando desenvolver habilidades socioemocionais",
+    "Tem enfrentado desafios no relacionamento com colegas, necessitando de apoio para a resolução pacífica de desentendimentos",
+    "Mostra tendência a conflitos que podem ser trabalhados para favorecer o convívio social",
+    "Precisa desenvolver estratégias para lidar melhor com frustrações e diferenças em grupo",
+    "É importante que receba orientações para melhorar suas habilidades de comunicação e cooperação"
+  ]
+};
+
+const frasesInteresse = {
+  alto: [
+    "Busca sempre explorar e compreender os temas abordados, demonstrando curiosidade e vontade de aprofundar o conhecimento",
+    "Demonstra grande interesse pelos conteúdos trabalhados, participando ativamente e questionando para ampliar sua aprendizagem",
+    "Mostra entusiasmo nas atividades propostas, o que favorece seu desenvolvimento e progresso acadêmico",
+    "Tem motivação constante para aprender, o que se reflete em seu desempenho nas aulas",
+    "Apresenta uma postura investigativa, procurando entender os conteúdos de forma profunda",
+    "Envolve-se com os temas com dedicação e vontade de descobrir novas ideias",
+    "Se destaca pela atenção e interesse demonstrados durante as explanações e atividades"
+  ],
+  medio: [
+    "Mantém um bom nível de interesse nas atividades, participando com constância e atenção",
+    "Mostra disposição para aprender e explorar os temas de forma gradual, apresentando progressos contínuos",
+    "Demonstra curiosidade e atenção nas propostas realizadas, com potencial para ampliar seu envolvimento",
+    "Participa das aulas com interesse regular, aproveitando as oportunidades de aprendizado",
+    "Tem mostrado progresso no interesse pelos conteúdos, que tende a crescer com o tempo",
+    "Apresenta uma postura receptiva, ainda que de forma moderada, às propostas didáticas",
+    "Engaja-se de forma satisfatória, contribuindo para o desenvolvimento de suas habilidades"
+  ],
+  baixo: [
+    "Mostra interesse em pontos específicos, mas pode ampliar esse engajamento para melhor aproveitamento das aulas",
+    "Participa de forma seletiva, com potencial para maior envolvimento nas atividades propostas",
+    "Demonstra curiosidade em momentos-chave das aulas, com espaço para desenvolver maior interesse e participação",
+    "Tem apresentado desmotivação em algumas situações, sendo importante buscar estratégias para estimular seu interesse",
+    "Encontra dificuldades para manter a atenção constante, o que pode ser trabalhado para melhorar o rendimento",
+    "Precisa ser incentivado para ampliar sua curiosidade e participação ativa",
+    "Pode beneficiar-se de acompanhamento mais próximo para despertar maior entusiasmo pelos temas"
+  ]
+};
+
+const frasesHabilidadeComputador = {
+  "sem dificuldades": [
+    "Manuseia o computador com facilidade e segurança, realizando as tarefas com autonomia e confiança",
+    "Demonstrou boa habilidade ao utilizar os recursos digitais disponíveis, facilitando seu aprendizado",
+    "Apresenta confiança no uso das ferramentas tecnológicas durante as atividades, o que contribui para seu desenvolvimento",
+    "Mostra domínio das ferramentas digitais, executando as tarefas com rapidez e eficiência",
+    "Utiliza os recursos tecnológicos de forma adequada, aproveitando ao máximo as possibilidades de aprendizagem",
+    "Tem facilidade para explorar novos programas e aplicações, demonstrando adaptabilidade",
+    "Se destaca pela agilidade e segurança no uso do computador durante as aulas"
+  ],
+  "com algumas dificuldades": [
+    "Enfrenta algumas dificuldades no manuseio do computador, mas tem se esforçado para superar os desafios e melhorar suas habilidades",
+    "Apresenta desafios pontuais no uso das ferramentas digitais, com progresso contínuo e determinação",
+    "Precisa de apoio em certas etapas, mas está evoluindo no aprendizado tecnológico e buscando autonomia",
+    "Tem avançado no uso do computador, ainda que encontre obstáculos em algumas tarefas",
+    "Recebe orientações e as aplica para melhorar suas habilidades digitais, demonstrando persistência",
+    "Com apoio, tem melhorado seu desempenho nas atividades tecnológicas propostas",
+    "Está em processo de desenvolvimento das competências digitais, com resultados progressivos"
+  ],
+  "necessita de apoio constante": [
+    "Necessita de apoio constante para realizar atividades no computador, demonstrando esforço para aprender e progredir",
+    "Encontra dificuldades significativas no manuseio das ferramentas digitais, requerendo acompanhamento próximo do professor",
+    "Depende de orientação frequente para utilização dos recursos tecnológicos, mas mostra empenho e interesse em melhorar",
+    "Precisa de suporte contínuo para acompanhar as atividades digitais, embora demonstre boa vontade",
+    "Apresenta limitações no uso dos equipamentos, sendo importante manter acompanhamento especializado",
+    "Recebe auxílio frequente para realizar tarefas no computador, buscando desenvolver maior autonomia",
+    "Enfrenta desafios importantes no manuseio do computador, mas persiste em suas tentativas de aprendizagem"
+  ]
+};
 
     let avaliacao = `Durante as aulas de Cultura Digital, ${nome} ${fraseAleatoria(frasesParticipacao[participacao])}. `;
     avaliacao += `${fraseAleatoria(frasesComportamento[comportamento])}. `;
@@ -316,3 +423,4 @@ function copiarTexto() {
 </script>
 </body>
 </html>
+
