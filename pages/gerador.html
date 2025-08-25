@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Avaliação</title>
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../scripts/firebase.js"></script>
+<script src="../scripts/gerador.js" defer></script>
+</head>
+<body>
+
+<!-- Botão menu mobile -->
+<button id="menuToggle" onclick="toggleMenu()">☰ Menu</button>
+
+<!-- Barra lateral -->
+<nav>
+  <h3>Menu</h3>
+  <a href="pagina-restrita.html">Área Restrita</a>
+  <a href="#">Trabalho 2</a>
+  <a href="#">Trabalho 3</a>
+  <a href="mailto:bruno@uno.dev.br">Contato</a>
+  <a href="#" onclick="logout()">Sair</a>
+</nav>
+
+<!-- Conteúdo principal -->
+<main>
+  <div class="container">
+    <h2>Gerador de Avaliação - Cultura Digital</h2>
+
+    <div class="form-item">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" placeholder="Digite o nome do aluno" autocomplete="off" />
+    </div>
+
+    <div class="form-item">
+      <label for="genero">Gênero:</label>
+      <select id="genero">
+        <option value="menino">Menino</option>
+        <option value="menina">Menina</option>
+        <option value="outro">Outro</option>
+      </select>
+    </div>
+
+    <div class="form-item">
+      <label for="participacao">Participação em sala:</label>
+      <select id="participacao">
+        <option value="alta">Alta</option>
+        <option value="media">Média</option>
+        <option value="baixa">Baixa</option>
+      </select>
+    </div>
+
+    <div class="form-item">
+      <label for="comportamento">Comportamento:</label>
+      <select id="comportamento">
+        <option value="respeitoso">Respeitoso</option>
+        <option value="colaborativo">Colaborativo</option>
+        <option value="cuidadoso">Cuidadoso</option>
+        <option value="conflituoso">Conflituoso</option>
+      </select>
+    </div>
+
+    <div class="form-item">
+      <label for="interesse">Nível de interesse:</label>
+      <select id="interesse">
+        <option value="alto">Alto</option>
+        <option value="medio">Médio</option>
+        <option value="baixo">Baixo</option>
+      </select>
+    </div>
+
+    <div class="form-item">
+      <label for="habilidadeComputador">Habilidade em manusear o computador:</label>
+      <select id="habilidadeComputador">
+        <option value="sem dificuldades">Sem dificuldades</option>
+        <option value="com algumas dificuldades">Com algumas dificuldades</option>
+        <option value="necessita de apoio constante">Necessita de apoio constante</option>
+      </select>
+    </div>
+
+    <div class="form-item">
+      <label for="observacoes">Observações adicionais:</label>
+      <textarea id="observacoes" placeholder="Digite aqui observações adicionais..."></textarea>
+    </div>
+
+    <div class="form-item">
+      <button class="btn" onclick="criarAvaliacao()">📄 Gerar Avaliação</button>
+      <button class="btn" id="copiarBtn" onclick="copiarTexto()">📋 Copiar Texto</button>
+    </div>
+
+    <div id="resultado" aria-live="polite"></div>
+  </div>
+</main>
+
+</body>
+</html>

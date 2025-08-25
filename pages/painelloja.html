@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>⚙️ Painel Admin Geral</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f5f5f5; }
+  header { background:#d32f2f; color:white; padding:20px; text-align:center; }
+  h1 { margin:0; font-size:1.8rem; }
+  main { padding:20px; max-width:800px; margin:auto; display:flex; flex-direction:column; gap:20px; }
+  .card { background:white; padding:20px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.1); display:flex; flex-direction:column; gap:10px; }
+  label { font-weight:bold; }
+  input, select { padding:8px; border-radius:5px; border:1px solid #ccc; width:100%; box-sizing:border-box; }
+  .flex { display:flex; gap:10px; flex-wrap:wrap; }
+  .flex > * { flex:1; min-width:150px; }
+  button { cursor:pointer; border:none; border-radius:5px; padding:10px; font-size:1rem; transition:0.2s; }
+  .btn-verde { background:#4CAF50; color:white; }
+  .btn-vermelho { background:#f44336; color:white; }
+  .info { background:#f0f0f0; padding:10px; border-radius:5px; }
+</style>
+
+<!-- Firebase SDK modular -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } 
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // 🔑 Configuração Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDfpJgjj0TjdVhJkizzyUH3kkElomDZOeY",
+    authDomain: "loja-escolar.firebaseapp.com",
+    projectId: "loja-escolar",
+    storageBucket: "loja-escolar.firebasestorage.app",
+    messagingSenderId: "214864008806",
+    appId: "1:214864008806:web:8595476773a48a2003bfa7"
+  };
+
+  // Inicializa Firebase + Firestore
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  let escolaSelecionada = null;
+
+  // 🔹 Carregar escolas
+  async function carregarEscolas() {
+    const snap = await getDocs(collection(db, "escolas"));
+    const select = document.getElementById("selectEscola");
+    snap.forEach(docSnap => {
+      const option = document.createElement("option");
+      option.value = docSnap.id;
+      option.textContent = docSnap.data().nome;
+      select.appendChild(option);
+    });
+  }
+
+  // 🔹 Atualizar resumo da escola
+  async function atualizarInfo() {
+    if(!escolaSelecionada) return;
+    const usuariosSnap = await getDocs(collection(db, "usuarios"));
+    const alunos = usuariosSnap.docs.filter(u => u.data().escolaId === escolaSelecionada && u.data().tipo !== "adminsys");
+
+    const produtosSnap = await getDocs(collection(db, "produtos"));
+    const produtos = produtosSnap.docs.filter(p => p.data().escolaId === escolaSelecionada);
+
+    const historicoSnap = await getDocs(collection(db, "historico"));
+    const historico = historicoSnap.docs.filter(h => h.data().escolaId === escolaSelecionada);
+
+    document.getElementById("infoEscola").innerHTML = `
+      <p>👨‍🎓 Alunos: ${alunos.length}</p>
+      <p>📦 Produtos: ${produtos.length}</p>
+      <p>🧾 Histórico: ${historico.length}</p>
+    `;
+  }
+
+  // 🔹 Login simples de admin
+  async function validarSenha() {
+    const usuario = document.getElementById("usuario").value.trim();
+    const senha = document.getElementById("senha").value.trim();
+    if(!usuario || !senha){ alert("Preencha usuário e senha!"); return false; }
+
+    const snap = await getDocs(collection(db, "usuarios"));
+    for(const u of snap.docs){
+      const data = u.data();
+      if(data.tipo === "adminsys" && data.nome === usuario){
+        if(data.senha === senha) return true;
+        else { alert("Senha incorreta!"); return false; }
+      }
+    }
+    alert("Usuário admin não encontrado!");
+    return false;
+  }
+
+  // 🔹 Funções administrativas
+  async function deletarAlunos() {
+    if(!escolaSelecionada) return alert("Selecione uma escola!");
+    if(!confirm("Tem certeza que deseja deletar todos os alunos?")) return;
+
+    const snap = await getDocs(collection(db, "usuarios"));
+    for(const u of snap.docs){
+      const data = u.data();
+      if(data.escolaId === escolaSelecionada && data.tipo !== "adminsys"){
+        await deleteDoc(doc(db, "usuarios", u.id));
+      }
+    }
+    alert("✅ Alunos deletados!");
+    atualizarInfo();
+  }
+
+  async function deletarProdutos() {
+    if(!escolaSelecionada) return alert("Selecione uma escola!");
+    if(!confirm("Tem certeza que deseja deletar todos os produtos?")) return;
+
+    const snap = await getDocs(collection(db, "produtos"));
+    for(const p of snap.docs){
+      if(p.data().escolaId === escolaSelecionada){
+        await deleteDoc(doc(db, "produtos", p.id));
+      }
+    }
+    alert("✅ Produtos deletados!");
+    atualizarInfo();
+  }
+
+  async function limparHistorico() {
+    if(!escolaSelecionada) return alert("Selecione uma escola!");
+    if(!confirm("Deseja realmente limpar o histórico?")) return;
+
+    const snap = await getDocs(collection(db, "historico"));
+    for(const h of snap.docs){
+      if(h.data().escolaId === escolaSelecionada){
+        await deleteDoc(doc(db, "historico", h.id));
+      }
+    }
+    alert("✅ Histórico limpo!");
+    atualizarInfo();
+  }
+
+  async function cadastrarProfessor() {
+    if(!escolaSelecionada) return alert("Selecione uma escola!");
+    const nome = document.getElementById("nomeProfessor").value.trim();
+    const senha = document.getElementById("senhaProfessor").value.trim();
+    if(!nome || !senha) return alert("Preencha nome e senha do professor!");
+
+    await addDoc(collection(db, "usuarios"), {
+      nome, senha, tipo:"professor", escolaId:escolaSelecionada
+    });
+    alert("✅ Professor cadastrado!");
+    document.getElementById("nomeProfessor").value="";
+    document.getElementById("senhaProfessor").value="";
+  }
+
+  // 🔹 Wrapper que pede senha antes de executar ação
+  async function executar(func) {
+    const valid = await validarSenha();
+    if(valid) func();
+  }
+
+  // Eventos
+  document.addEventListener("DOMContentLoaded", ()=>{
+    carregarEscolas();
+    document.getElementById("selectEscola").addEventListener("change", e=>{
+      escolaSelecionada = e.target.value;
+      atualizarInfo();
+    });
+    document.getElementById("btnAlunos").onclick = ()=> executar(deletarAlunos);
+    document.getElementById("btnProdutos").onclick = ()=> executar(deletarProdutos);
+    document.getElementById("btnHistorico").onclick = ()=> executar(limparHistorico);
+    document.getElementById("btnProfessor").onclick = ()=> executar(cadastrarProfessor);
+  });
+</script>
+</head>
+<body>
+<header>
+  <h1>⚙️ Painel do Admin Geral</h1>
+</header>
+
+<main>
+  <div class="card">
+    <h3>Login Admin</h3>
+    <div class="flex">
+      <input type="text" id="usuario" placeholder="adminmaster">
+      <input type="password" id="senha" placeholder="Senha">
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Selecionar Escola</h3>
+    <select id="selectEscola">
+      <option value="">-- Selecione uma escola --</option>
+    </select>
+    <div class="info" id="infoEscola">
+      <p>Selecione uma escola para ver informações</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Ações</h3>
+    <div class="flex">
+      <button class="btn-vermelho" id="btnAlunos">🧑‍🎓 Deletar Alunos</button>
+      <button class="btn-vermelho" id="btnProdutos">📦 Deletar Produtos</button>
+      <button class="btn-vermelho" id="btnHistorico">🧾 Limpar Histórico</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Cadastrar Professor</h3>
+    <div class="flex">
+      <input type="text" id="nomeProfessor" placeholder="Nome do professor">
+      <input type="text" id="senhaProfessor" placeholder="Senha">
+    </div>
+    <button class="btn-verde" id="btnProfessor">➕ Cadastrar Professor</button>
+  </div>
+</main>
+</body>
+</html>

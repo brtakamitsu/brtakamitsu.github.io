@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Área Restrita - Meus Projetos</title>
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="../scripts/firebase.js"></script>
+<script src="../scripts/restrita.js" defer></script>
+</head>
+<body>
+
+<!-- Botão menu mobile -->
+<button id="menuToggle" onclick="toggleMenu()">☰ Menu</button>
+
+<!-- Barra lateral -->
+<nav>
+  <h3>Menu</h3>
+  <a href="../index.html">Início</a>
+  <a href="gerador.html">Gerador de Avaliação</a>
+  <a href="painelloja.html">Painel Loja</a>
+  <a href="#">Trabalho 3</a>
+  <a href="mailto:bruno@uno.dev.br">Contato</a>
+  <a href="#" onclick="logout()">Sair</a>
+</nav>
+
+<!-- Conteúdo principal -->
+<main>
+  <div class="container">
+    <h2>Área Restrita - Meus Projetos</h2>
+    <button onclick="window.location.href='gerador.html'">Gerador de Avaliação</button>
+    <button onclick="window.location.href='painelloja.html'">ADM Loja</button>
+    <button onclick="window.location.href='#'">Trabalho 3</button>
+    <button onclick="logout()">Sair</button>
+  </div>
+</main>
+
+</body>
+</html>
