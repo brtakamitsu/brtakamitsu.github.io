@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo da Loja</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .jump {
+      animation: jump 0.6s ease forwards;
+    }
+    @keyframes jump {
+      0% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-20px) rotate(-10deg); }
+      50% { transform: translateY(-40px) rotate(10deg); }
+      75% { transform: translateY(-20px) rotate(-10deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-yellow-100 to-green-100 flex items-center justify-center min-h-screen">
+  <div id="app" class="max-w-xl w-full bg-white shadow-xl rounded-3xl p-6">
+    <img src="https://i.ibb.co/VYCRcfm8/UNO-DEV-BR.png" alt="Jogo da Loja" class="mx-auto w-64">
+
+    <!-- Tela inicial -->
+    <div id="setup" class="text-center space-y-4">
+      <p class="text-lg font-semibold">Configurações</p>
+
+      <div>
+        <label class="block mb-1">Quantas rodadas?</label>
+        <select id="rounds" class="border-2 border-green-400 p-2 rounded-lg w-40 text-lg">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block mb-1">Limite máximo:</label>
+        <select id="limit" class="border-2 border-green-400 p-2 rounded-lg w-40 text-lg">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+
+      <button onclick="startGame()" class="bg-green-500 text-white w-full py-3 rounded-xl text-xl hover:bg-green-600">
+        ▶️ Começar
+      </button>
+    </div>
+
+    <!-- Tela do jogo -->
+    <div id="game" class="hidden text-center">
+      <p class="mb-3 font-bold text-xl">Rodada <span id="currentRound"></span>/<span id="totalRounds"></span></p>
+      <div class="w-full bg-gray-300 rounded-full h-4 mb-4">
+        <div id="progressBar" class="bg-green-500 h-4 rounded-full w-0 transition-all"></div>
+      </div>
+      <p class="mb-4 text-lg">💰 Saldo: <span id="balance" class="font-bold text-green-700 text-2xl"></span></p>
+      
+      <p class="mb-2 text-lg">🛒 Carrinho:</p>
+      <div id="cart" class="grid grid-cols-2 gap-4 justify-center mb-6"></div>
+
+      <div class="flex justify-center gap-8">
+        <button onclick="answer(true)" class="bg-blue-500 text-white px-6 py-4 rounded-2xl text-2xl hover:bg-blue-600">
+          ✅ Pode
+        </button>
+        <button onclick="answer(false)" class="bg-red-500 text-white px-6 py-4 rounded-2xl text-2xl hover:bg-red-600">
+          ❌ Não Pode
+        </button>
+      </div>
+    </div>
+
+    <!-- Tela final -->
+    <div id="result" class="hidden text-center">
+      <h2 class="text-3xl font-bold mb-4 text-green-700">🏆 Fim do Jogo!</h2>
+      <p class="text-2xl mb-4">Você fez <span id="score"></span> ponto(s) 🎉</p>
+      <div id="stars" class="text-yellow-400 text-5xl mb-4"></div>
+      <button onclick="location.reload()" class="mt-6 bg-green-500 text-white px-6 py-3 rounded-2xl text-xl hover:bg-green-600">
+        🔄 Jogar Novamente
+      </button>
+    </div>
+  </div>
+
+  <!-- Sons -->
+  <audio id="sound-correct" src="https://actions.google.com/sounds/v1/crowds/cheer.ogg"></audio>
+  <audio id="sound-wrong" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
+  <audio id="sound-fanfare" src="https://actions.google.com/sounds/v1/alarms/fanfare.ogg"></audio>
+  <audio id="sound-click" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+
+  <script>
+    const prices = { 
+      Banana: { price: 1, emoji: "🍌" }, 
+      "Maçã": { price: 2, emoji: "🍎" }, 
+      Pera: { price: 5, emoji: "🍐" }, 
+      Uvas: { price: 5, emoji: "🍇" }
+    };
+    let rounds = 0, limit = 0, currentRound = 0, score = 0;
+
+    function startGame() {
+      rounds = parseInt(document.getElementById("rounds").value);
+      limit = parseInt(document.getElementById("limit").value);
+      currentRound = 0;
+      score = 0;
+
+      document.getElementById("setup").classList.add("hidden");
+      document.getElementById("game").classList.remove("hidden");
+      document.getElementById("totalRounds").textContent = rounds;
+      updateProgressBar();
+      nextRound();
+    }
+
+    function nextRound() {
+      currentRound++;
+      updateProgressBar();
+      if (currentRound > rounds) {
+        endGame();
+        return;
+      }
+
+      document.getElementById("currentRound").textContent = currentRound;
+      let balance = Math.floor(Math.random() * (limit * 2)) + 1;
+      document.getElementById("balance").textContent = balance;
+
+      let items = Object.keys(prices);
+      let cart = {};
+      let cartTotal = 0;
+      let itemCount = Math.floor(Math.random() * 3) + 1;
+
+      for (let i = 0; i < itemCount; i++) {
+        let item = items[Math.floor(Math.random() * items.length)];
+        let qty = Math.floor(Math.random() * (limit / prices[item].price)) + 1;
+        if (limit === 10 && qty > 2) qty = 2;
+        cart[item] = (cart[item] || 0) + qty;
+        cartTotal += qty * prices[item].price;
+      }
+
+      let cartDiv = document.getElementById("cart");
+      cartDiv.innerHTML = "";
+      for (let item in cart) {
+        let totalItem = cart[item] * prices[item].price;
+        let div = document.createElement("div");
+        div.className = "flex flex-col items-center bg-yellow-100 rounded-xl p-3 shadow";
+        div.innerHTML = `
+          <span class="text-5xl">${prices[item].emoji}</span>
+          <span class="text-xl font-bold">x${cart[item]}</span>
+          <span class="text-md text-green-700">R$${prices[item].price} cada</span>
+          <span class="text-md font-semibold">Total: R$${totalItem}</span>
+        `;
+        cartDiv.appendChild(div);
+      }
+
+      document.getElementById("cart").dataset.total = cartTotal;
+    }
+
+    function answer(canBuy) {
+      document.getElementById("sound-click").play();
+      let total = parseInt(document.getElementById("cart").dataset.total);
+      let balance = parseInt(document.getElementById("balance").textContent);
+      let correct = (balance >= total);
+
+      if (canBuy === correct) {
+        score++;
+        document.getElementById("sound-correct").play();
+        // animação frutas
+        document.querySelectorAll("#cart div").forEach(div => {
+          div.classList.add("jump");
+          setTimeout(() => div.classList.remove("jump"), 600);
+        });
+      } else {
+        document.getElementById("sound-wrong").play();
+      }
+      setTimeout(nextRound, 700);
+    }
+
+    function updateProgressBar() {
+      let progress = ((currentRound - 1) / rounds) * 100;
+      document.getElementById("progressBar").style.width = progress + "%";
+    }
+
+    function endGame() {
+      document.getElementById("game").classList.add("hidden");
+      document.getElementById("result").classList.remove("hidden");
+      document.getElementById("score").textContent = score;
+
+      // calcular estrelas
+      let percent = score / rounds;
+      let stars = "";
+      if (percent <= 0.4) stars = "⭐";
+      else if (percent <= 0.7) stars = "⭐⭐";
+      else stars = "⭐⭐⭐";
+      document.getElementById("stars").textContent = stars;
+
+      // barra cheia no final
+      document.getElementById("progressBar").style.width = "100%";
+
+      // tocar fanfarra
+      document.getElementById("sound-fanfare").play();
+    }
+  </script>
+</body>
+</html>
