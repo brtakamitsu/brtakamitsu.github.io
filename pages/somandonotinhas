@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo das Notinhas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: url('/imgs/wallpaper.png') no-repeat center center fixed;
+      background-size: cover;
+      padding: 20px;
+      color: #222;
+    }
+    #logo {
+      width: 250px;
+      margin-bottom: 10px;
+    }
+    #game-container {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 20px;
+      display: inline-block;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    #notas {
+      margin: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .nota-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .nota-container img {
+      margin: 5px 0;
+    }
+    .nota {
+      width: 100px;
+    }
+    .mao {
+      height: 70px;
+    }
+    #mensagem {
+      font-weight: bold;
+      margin: 15px;
+      font-size: 18px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+      border: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    #btnRecomecar {
+      display: none; /* escondido até o fim */
+      background: #4CAF50;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  
+  
+  <div id="game-container">
+    <h1><img id="logo" src="/imgs/logo.png" alt="Logotipo do jogo"></h1>
+    <p>Nível: Educação Infantil</p>
+    
+    <div id="rodadaInfo"></div>
+    <div id="notas"></div>
+    
+    <input type="number" id="resposta" placeholder="Digite a soma">
+    <button onclick="verificar()">Conferir</button>
+    
+    <div id="mensagem"></div>
+    <button onclick="proximaRodada()">Próxima rodada</button>
+    <div id="resultadoFinal"></div>
+    
+    <button id="btnRecomecar" onclick="recomecar()">🔄 Recomeçar jogo</button>
+    <footer>© 2025 - uno.dev.br</footer>
+  </div>
+
+  <script>
+    const notasDisponiveis = [
+      { valor: 1, img: "nota1.png", mao: "mao1.png" },
+      { valor: 2, img: "nota2.png", mao: "mao2.png" },
+      { valor: 5, img: "nota5.png", mao: "mao5.png" }
+    ];
+
+    let rodada = 0;
+    let pontos = 0;
+    let somaCorreta = 0;
+
+    function sortearNotas() {
+      let total = 0;
+      let notas = [];
+      
+      while (notas.length < 3) {
+        let sorteada = notasDisponiveis[Math.floor(Math.random() * notasDisponiveis.length)];
+        if (total + sorteada.valor <= 15) {
+          notas.push(sorteada);
+          total += sorteada.valor;
+        } else {
+          break;
+        }
+      }
+      somaCorreta = total;
+      mostrarNotas(notas);
+    }
+
+    function mostrarNotas(notas) {
+      const container = document.getElementById("notas");
+      container.innerHTML = "";
+      notas.forEach(n => {
+        let div = document.createElement("div");
+        div.className = "nota-container";
+
+        let imgNota = document.createElement("img");
+        imgNota.src = `/imgs/${n.img}`;
+        imgNota.className = "nota";
+        
+        let imgMao = document.createElement("img");
+        imgMao.src = `/imgs/${n.mao}`;
+        imgMao.className = "mao";
+
+        div.appendChild(imgNota);
+        div.appendChild(imgMao);
+        container.appendChild(div);
+      });
+    }
+
+    function verificar() {
+      let resposta = parseInt(document.getElementById("resposta").value);
+      let msg = "";
+      if (resposta === somaCorreta) {
+        pontos++;
+        msg = "🎉 Muito bem! Você acertou!";
+      } else {
+        msg = `❌ Ops! O correto era ${somaCorreta}.`;
+      }
+      document.getElementById("mensagem").textContent = msg;
+    }
+
+    function proximaRodada() {
+      rodada++;
+      document.getElementById("mensagem").textContent = "";
+      document.getElementById("resposta").value = "";
+      
+      if (rodada <= 5) {
+        document.getElementById("rodadaInfo").textContent = `Rodada ${rodada} de 5`;
+        sortearNotas();
+      } else {
+        document.getElementById("resultadoFinal").textContent = `Fim do jogo! Você acertou ${pontos} de 5.`;
+        document.getElementById("notas").innerHTML = "";
+        document.getElementById("btnRecomecar").style.display = "inline-block"; // mostra botão
+      }
+    }
+
+    function recomecar() {
+      rodada = 0;
+      pontos = 0;
+      document.getElementById("resultadoFinal").textContent = "";
+      document.getElementById("mensagem").textContent = "";
+      document.getElementById("btnRecomecar").style.display = "none";
+      proximaRodada();
+    }
+
+    // Inicia o jogo
+    proximaRodada();
+  </script>
+</body>
+</html>
